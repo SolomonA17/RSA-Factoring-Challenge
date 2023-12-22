@@ -1,36 +1,32 @@
 #!/usr/bin/python3
-"""
-Factorize as many numbers as possible into
-a product of two smaller prime numbers.
-
-Functions:
-    factorize()
-
-Usage: ./rsa <file>
-    Where <file> is a file containing one natural number to factor.
-Output format: n=p*q
-    p and q are always prime numbers.
-"""
-
+# library to get arguments
 import sys
-import ctypes
 
 
-def factorize():
+# fn unpack number factorial
+def fc():
     """
-    Factorizes as many numbers as possible into
-    a product of two smaller prime numbers and print them.
+    function fc to search file to convert number and format n=p*q
     """
+    try:
+        revfile = sys.argv[1]
+        with open(revfile) as f:
+            for revnumber in f:
+                revnumber = int(revnumber)
+                if revnumber % 2 == 0:
+                        print("{}={}*{}".format(revnumber, revnumber // 2, 2))
+                        continue
+                i = 3
+                while i < revnumber // 2:
+                    if revnumber % i == 0:
+                        print("{}={}*{}".format(revnumber, revnumber // i, i))
+                        break
+                    i = i + 2
+                if i == (revnumber // 2) + 1:
+                    print("{}={}*{}".format(revnumber, revnumber, 1))
+    except (IndexError):
+        pass
 
-    c_factors = ctypes.CDLL("./lib_factors.so")
-    c_factors.find_divisor.argtypes = [ctypes.c_long]
-    with open(sys.argv[1]) as f:
-        line = f.readline()
-        while line != '':
-            num = int(line)
-            c_factors.find_divisor(num)
-            line = f.readline()
 
-
-if __name__ == "__main__":
-    factorize()
+# autostart
+fc()
